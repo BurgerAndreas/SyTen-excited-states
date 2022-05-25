@@ -138,11 +138,21 @@ def plot_all():
             for spin in ['Half']:
                 plot_energies(fname=model+str(sites), spin=spin)
 
-plot_energies(fname='ising4', spin='Half', clean=[0, 3, 5])
+#plot_energies(fname='ising4', spin='Half', clean=[0, 3, 5])
 #plot_energies(fname='ising8', spin='Half', clean=[0, 3, 5])
 #plot_energies(fname='ising16', spin='Half', clean=[0, 3, 4])
 #plot_energies(fname='ising32', spin='Half', clean='smaller')
-#plot_energies(fname='ising64', spin='Half', clean='smaller')
+
+#plot_energies(fname='ising4', spin='One')
+#plot_energies(fname='ising8', spin='One')
+#plot_energies(fname='ising16', spin='One')
+#plot_energies(fname='ising32', spin='One')
+
+#plot_energies(fname='ising4', spin='One', clean=[0, 3, 4])
+plot_energies(fname='ising8', spin='One', clean=[0, 3, 4])
+#plot_energies(fname='ising16', spin='One', clean=[0, 3, 5])
+#plot_energies(fname='ising32', spin='One', clean=[0, 3, 4])
+
 #plot_energies(fname='heisenberg32')
 
 
