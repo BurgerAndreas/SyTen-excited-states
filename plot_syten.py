@@ -5,8 +5,8 @@ import os as os
 
 
 # plot energy in file ./log_folder/fname_energies.csv
-def plot_energies(fname='ising32', spin='Half', clean=None):
-    #
+def plot_energies(model='ising', N=16, spin='Half', clean=None, compare=False):
+    fname = model + str(N)
     log_folder = './data_spin' + spin + '/'
     plot_folder = './plots_spin' + spin + '/'
     #log_folder = './data/'
@@ -70,11 +70,32 @@ def plot_energies(fname='ising32', spin='Half', clean=None):
 
         energies = energies_reduced
 
+    # readout comparison energies
+    if compare:
+        file_comp = './exact-diagonalisation/' + model + "_" + str(N) + '.csv'
+        j_comp = []
+        energies_comp = []
+        with open(file_comp, 'r') as compfile:
+            log = csv.reader(compfile, delimiter=',')
+            for row in log:
+                if row[0].startswith('#'):
+                    continue  # ignore
+                else:
+                    j_comp.append(float(row[0]))
+                    energies_comp.append(row[1:])
+        energies_comp = np.array(energies_comp, dtype=float)
+        compfile.close()
+
     # plot energies
     for e in range(np.shape(energies)[1]):
         plt.plot(j, energies[:, e], marker='x', lw=1, ms=4, label='E' + str(e))
+    # plot comparison energies
+    if compare:
+        for e in range(3):
+            plt.plot(j_comp, energies_comp[:, e], marker='o', lw=1, ms=4, label='ED' + str(e))
+        plt.xlim([0.1, 2.1])
     # plt.grid(axis='both')
-    plt.title('Energies | ' + fname + ' spin' + spin)
+    plt.title('SyTen Energies | ' + fname + ' spin' + spin)
     plt.ylabel('energy')
     plt.xlabel('J')
     plt.legend(loc="upper right")
@@ -84,17 +105,34 @@ def plot_energies(fname='ising32', spin='Half', clean=None):
     plt.cla()
     plt.clf()
 
+    # plot difference MPS to ED
+    if compare:
+        for e in range(3):
+            plt.plot(j_comp, np.abs(energies[21:, e] - energies_comp[:, e]), marker='x', lw=1, ms=4,
+                     label='|MPS-ED|' + str(e))
+        plt.xlim([0.1, 2.1])
+        # plt.grid(axis='both')
+        plt.title('SyTen vs ED | ' + fname + ' spin' + spin)
+        plt.ylabel('energy')
+        plt.xlabel('J')
+        plt.legend(loc="upper right")
+        plt.savefig(plot_folder + fname + '_mps_vs_ed.png', dpi=400)
+        #plt.show()
+        plt.close()
+        plt.cla()
+        plt.clf()
+
     # plot energy differences
     for e in range(np.shape(energies)[1] - 1):
         diff = np.abs(energies[:, 0] - energies[:, e + 1])
         plt.plot(j, diff, marker='x', lw=1, ms=4, label='|E0-E' + str(e+1) + '|')
     plt.grid(axis='both')
-    plt.title('Energy gaps | ' + fname + ' spin' + spin)
+    plt.title('SyTen Energy gap | ' + fname + ' spin' + spin)
     plt.ylabel('energy gap')
     plt.xlabel('J')
     plt.legend(loc="upper right")
     plt.savefig(plot_folder + fname + '_gap.png', dpi=400)
-    plt.show()
+    #plt.show()
     plt.close()
     plt.cla()
     plt.clf()
@@ -132,11 +170,6 @@ def plot_energies(fname='ising32', spin='Half', clean=None):
 
 
 # ising8, heisenberg16
-def plot_all():
-    for model in ['ising']:
-        for sites in [4, 8, 16, 32]:
-            for spin in ['Half']:
-                plot_energies(fname=model+str(sites), spin=spin)
 
 #plot_energies(fname='ising4', spin='Half', clean=[0, 3, 5])
 #plot_energies(fname='ising8', spin='Half', clean=[0, 3, 5])
@@ -148,10 +181,10 @@ def plot_all():
 #plot_energies(fname='ising16', spin='One')
 #plot_energies(fname='ising32', spin='One')
 
-#plot_energies(fname='ising4', spin='One', clean=[0, 3, 4])
-plot_energies(fname='ising8', spin='One', clean=[0, 3, 4])
-#plot_energies(fname='ising16', spin='One', clean=[0, 3, 5])
-#plot_energies(fname='ising32', spin='One', clean=[0, 3, 4])
+#plot_energies(model='ising', N=4, spin='Half', clean=None, compare=True)
+#plot_energies(model='ising', N=8, spin='Half', clean=None, compare=True)
+plot_energies(model='ising', N=16, spin='Half', clean=None, compare=True)
+#plot_energies(model='ising', N=32, spin='Half', clean=None, compare=False)
 
 #plot_energies(fname='heisenberg32')
 
