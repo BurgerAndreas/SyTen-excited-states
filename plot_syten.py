@@ -100,7 +100,7 @@ def plot_energies(model='ising', N=16, spin='Half', clean=None, compare=False):
     plt.xlabel('J')
     plt.legend(loc="upper right")
     plt.savefig(plot_folder + fname + '_energies.png', dpi=400)
-    plt.show()
+    #plt.show()
     plt.close()
     plt.cla()
     plt.clf()
@@ -117,12 +117,12 @@ def plot_energies(model='ising', N=16, spin='Half', clean=None, compare=False):
         plt.xlabel('J')
         plt.legend(loc="upper right")
         plt.savefig(plot_folder + fname + '_mps_vs_ed.png', dpi=400)
-        #plt.show()
+        plt.show()
         plt.close()
         plt.cla()
         plt.clf()
 
-    # plot energy differences
+    # plot energy gap
     for e in range(np.shape(energies)[1] - 1):
         diff = np.abs(energies[:, 0] - energies[:, e + 1])
         plt.plot(j, diff, marker='x', lw=1, ms=4, label='|E0-E' + str(e+1) + '|')
@@ -181,9 +181,9 @@ def plot_energies(model='ising', N=16, spin='Half', clean=None, compare=False):
 #plot_energies(fname='ising16', spin='One')
 #plot_energies(fname='ising32', spin='One')
 
-#plot_energies(model='ising', N=4, spin='Half', clean=None, compare=True)
-#plot_energies(model='ising', N=8, spin='Half', clean=None, compare=True)
-plot_energies(model='ising', N=16, spin='Half', clean=None, compare=True)
+plot_energies(model='ising', N=4, spin='Half2', clean=[0, 3, 4], compare=True)
+plot_energies(model='ising', N=8, spin='Half2', clean=[0, 3, 4], compare=True)
+plot_energies(model='ising', N=16, spin='Half2', clean=[0, 3, 4], compare=True)
 #plot_energies(model='ising', N=32, spin='Half', clean=None, compare=False)
 
 #plot_energies(fname='heisenberg32')
